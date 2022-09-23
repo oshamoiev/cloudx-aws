@@ -1,0 +1,120 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Template for CloudX task VPC creation
+Resources:
+  cloudxCloudFormationVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsSupport: 'true'
+      EnableDnsHostnames: 'true'
+      Tags:
+        - Key: Name
+          Value: cloudxCloudFormationVPC
+  cloudxCloudFormationIGW:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: cloudxCloudFormationIGW
+  cloudxCloudFormationIGWToVPCAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId:
+        Ref: cloudxCloudFormationVPC
+      InternetGatewayId:
+        Ref: cloudxCloudFormationIGW
+  cloudxCloudFormationPublicSubnetA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId:
+        Ref: cloudxCloudFormationVPC
+      CidrBlock: 10.0.11.0/24
+      AvailabilityZone: "us-east-1a"
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: cloudxCloudFormationPublicSubnetA
+  cloudxCloudFormationPublicSubnetB:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId:
+        Ref: cloudxCloudFormationVPC
+      CidrBlock: 10.0.21.0/24
+      AvailabilityZone: "us-east-1b"
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: cloudxCloudFormationPublicSubnetB
+  cloudxCloudFormationPublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: cloudxCloudFormationVPC
+      Tags:
+        - Key: Name
+          Value: cloudxCloudFormationPublicRouteTable
+  cloudxCloudFormationIGWRoute:
+    Type: AWS::EC2::Route
+    DependsOn: cloudxCloudFormationIGWToVPCAttachment
+    Properties:
+      RouteTableId:
+        Ref: cloudxCloudFormationPublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId:
+        Ref: cloudxCloudFormationIGW
+  publicSubnetAPublicRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId:
+        Ref: cloudxCloudFormationPublicSubnetA
+      RouteTableId:
+        Ref: cloudxCloudFormationPublicRouteTable
+  publicSubnetBPublicRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId:
+        Ref: cloudxCloudFormationPublicSubnetB
+      RouteTableId:
+        Ref: cloudxCloudFormationPublicRouteTable
+  cloudxCloudFormationDBSubnetA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId:
+        Ref: cloudxCloudFormationVPC
+      CidrBlock: 10.0.12.0/24
+      AvailabilityZone: "us-east-1a"
+      Tags:
+        - Key: Name
+          Value: cloudxCloudFormationDBSubnetA
+  cloudxCloudFormationDBSubnetB:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId:
+        Ref: cloudxCloudFormationVPC
+      CidrBlock: 10.0.13.0/24
+      AvailabilityZone: "us-east-1b"
+      Tags:
+        - Key: Name
+          Value: cloudxCloudFormationDBSubnetB
+  cloudxCloudFormationDBRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: cloudxCloudFormationVPC
+      Tags:
+        - Key: Name
+          Value: cloudxCloudFormationDBRouteTable
+  dbSubnetADBRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId:
+        Ref: cloudxCloudFormationDBSubnetA
+      RouteTableId:
+        Ref: cloudxCloudFormationDBRouteTable
+  dbSubnetBDBRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId:
+        Ref: cloudxCloudFormationDBSubnetB
+      RouteTableId:
+        Ref: cloudxCloudFormationDBRouteTable
