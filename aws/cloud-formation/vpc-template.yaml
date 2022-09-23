@@ -118,3 +118,38 @@ Resources:
         Ref: cloudxCloudFormationDBSubnetB
       RouteTableId:
         Ref: cloudxCloudFormationDBRouteTable
+  cloudxCloudFormationPublicSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow http/s and SSH access to public instances
+      VpcId:
+        Ref: cloudxCloudFormationVPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 93.127.45.206/32
+      Tags:
+        - Key: Name
+          Value: cloudxCloudFormationPublicSecurityGroup
+  cloudxCloudFormationInnerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow http/s and SSH access to public instances
+      VpcId:
+        Ref: cloudxCloudFormationVPC
+      Tags:
+        - Key: Name
+          Value: cloudxCloudFormationInnerSecurityGroup
+  cloudxCloudFormationInnerSecurityGroupIngress:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      IpProtocol: -1
+      GroupId:
+        Ref: cloudxCloudFormationInnerSecurityGroup
+      SourceSecurityGroupId:
+        Ref: cloudxCloudFormationInnerSecurityGroup
