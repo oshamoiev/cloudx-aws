@@ -153,3 +153,37 @@ Resources:
         Ref: cloudxCloudFormationInnerSecurityGroup
       SourceSecurityGroupId:
         Ref: cloudxCloudFormationInnerSecurityGroup
+  cloudxCloudFormationPublicEc2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-026b57f3c383c2eec
+      InstanceType: t2.micro
+      KeyName: cloudx
+      SecurityGroupIds:
+        - Ref: cloudxCloudFormationPublicSecurityGroup
+        - Ref: cloudxCloudFormationInnerSecurityGroup
+      SubnetId:
+        Ref: cloudxCloudFormationPublicSubnetA
+      UserData:
+        Fn::Base64:
+          Fn::Join: [ "", [
+            "#!/bin/bash -xe\n",
+            "yum install -y httpd\n",
+            "systemctl start httpd\n"
+          ] ]
+      Tags:
+        - Key: Name
+          Value: cloudxCloudFormationPublicEc2Instance
+  cloudxCloudFormationDBEc2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-026b57f3c383c2eec
+      InstanceType: t2.micro
+      KeyName: cloudx
+      SecurityGroupIds:
+        - Ref: cloudxCloudFormationInnerSecurityGroup
+      SubnetId:
+        Ref: cloudxCloudFormationDBSubnetB
+      Tags:
+        - Key: Name
+          Value: cloudxCloudFormationDBEc2Instance
