@@ -6,4 +6,4 @@ runcmd:
  - [ sh, -c, "yum install -y java-17-amazon-corretto" ]
  - mkdir /cloudx-app
  - [ sh, -c, "aws s3 cp s3://oleksandr-shamoiev-bucket/cloudx-app/webapp.jar /cloudx-app/" ]
- - [ sh, -c, "java -jar /cloudx-app/webapp.jar" ]
+ - [ sh, -c, "java -Daws.accessKeyId=key -Daws.secretAccessKey=secret -jar /cloudx-app/webapp.jar" ]
