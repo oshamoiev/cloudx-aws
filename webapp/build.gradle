@@ -18,6 +18,7 @@ dependencies {
 	implementation 'com.amazonaws:aws-java-sdk-ec2'
 	implementation 'com.amazonaws:aws-java-sdk-s3'
 	implementation 'com.amazonaws:aws-java-sdk-sqs'
+	implementation 'com.amazonaws:aws-java-sdk-sns'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.mapstruct:mapstruct:1.5.2.Final'
