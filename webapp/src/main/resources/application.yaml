@@ -11,3 +11,8 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
+app:
+  amazon:
+    sqsURL: https://sqs.us-east-1.amazonaws.com/366246053967/uploads-notification-queue
+    snsTopicARN: arn:aws:sns:us-east-1:366246053967:uploads-notification-topic
