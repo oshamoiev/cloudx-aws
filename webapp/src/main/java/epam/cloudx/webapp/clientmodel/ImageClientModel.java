@@ -14,4 +14,17 @@ public class ImageClientModel {
     private LocalDateTime updatedAt;
     private byte[] bitmap;
     private ObjectMetadata objectMetadata;
+
+    @Override
+    public String toString() {
+        return "ImageClientModel{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", size=" + size +
+                ", fileExtension='" + fileExtension + '\'' +
+                ", updatedAt=" + updatedAt +
+                ", objectMetadata=" + objectMetadata +
+                '}';
+    }
 }
+

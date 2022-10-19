@@ -6,8 +6,9 @@ import epam.cloudx.webapp.dao.ImageJpaRepository;
 import epam.cloudx.webapp.entity.ImageEntityModel;
 import epam.cloudx.webapp.exception.S3ObjectNotFoundException;
 import epam.cloudx.webapp.mapper.CloudXImageMapper;
-import epam.cloudx.webapp.service.CloudXS3Service;
 import epam.cloudx.webapp.service.CloudXFileService;
+import epam.cloudx.webapp.service.CloudXS3Service;
+import epam.cloudx.webapp.service.CloudxSQSService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -25,16 +26,15 @@ public class ImageFacade {
     private final CloudXImageMapper cloudXImageMapper;
     private final CloudXS3Service cloudXS3Service;
     private final CloudXFileService cloudXFileService;
-
-//    @Value("${server.port}")
-//    private String serverPort;
+    private final CloudxSQSService cloudxSQSService;
 
     public ImageFacade(ImageJpaRepository imageJpaRepository, CloudXImageMapper cloudXImageMapper,
-                       CloudXS3Service cloudXS3Service, CloudXFileService cloudXFileService) {
+                       CloudXS3Service cloudXS3Service, CloudXFileService cloudXFileService, CloudxSQSService cloudxSQSService) {
         this.imageJpaRepository = imageJpaRepository;
         this.cloudXImageMapper = cloudXImageMapper;
         this.cloudXS3Service = cloudXS3Service;
         this.cloudXFileService = cloudXFileService;
+        this.cloudxSQSService = cloudxSQSService;
     }
 
     @Transactional
@@ -58,6 +58,8 @@ public class ImageFacade {
         entityModel.setFileExtension(cloudXFileService.getFileExtension(file.getOriginalFilename()));
         ImageEntityModel save = imageJpaRepository.save(entityModel);
         ImageClientModel imageClientModel = cloudXImageMapper.toClientModel(save, cloudXS3Service);
+        String message = createMessage(imageClientModel);
+        cloudxSQSService.sendMessage(message);
         return new ResponseEntity<>(imageClientModel, HttpStatus.CREATED);
     }
 
@@ -85,5 +87,13 @@ public class ImageFacade {
             throw new S3ObjectNotFoundException();
         }
         return cloudXImageMapper.toClientModel(byName.get(0), cloudXS3Service).getBitmap();
+    }
+
+    private String createMessage(ImageClientModel imageMetadata) {
+//        String downloadLink = WebMvcLinkBuilder
+//                .linkTo(WebMvcLinkBuilder.methodOn(ImageController.class).download(imageMetadata.getName()))
+//                .toString();
+
+        return String.join(":::", "Image was uploaded", imageMetadata.toString(), "downloadLink");
     }
 }
