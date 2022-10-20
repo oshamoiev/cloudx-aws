@@ -6,7 +6,7 @@ import epam.cloudx.webapp.service.CloudxSQSService;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-@Component
+//@Component
 public class SQSQueueListener {
 
     private final CloudxSQSService cloudxSQSService;
