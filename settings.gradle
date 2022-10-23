@@ -1,2 +1,3 @@
-rootProject.name = 'cloudx-app  '
+rootProject.name = 'cloudx-app'
 include 'webapp'
+project(":webapp").name = "webapp"
