@@ -11,10 +11,10 @@ Globals:
     Timeout: 20
 
 Resources:
-  HelloWorldFunction:
+  cloudxsqslambda:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
-      CodeUri: HelloWorldFunction
+      CodeUri: cloudxsqslambda
       Handler: helloworld.App::handleRequest
       Runtime: java11
       Architectures:
@@ -38,9 +38,9 @@ Outputs:
   HelloWorldApi:
     Description: "API Gateway endpoint URL for Prod stage for Hello World function"
     Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
-  HelloWorldFunction:
+  cloudxsqslambda:
     Description: "Hello World Lambda Function ARN"
-    Value: !GetAtt HelloWorldFunction.Arn
-  HelloWorldFunctionIamRole:
+    Value: !GetAtt cloudxsqslambda.Arn
+  cloudxsqslambdaIamRole:
     Description: "Implicit IAM Role created for Hello World function"
-    Value: !GetAtt HelloWorldFunctionRole.Arn
+    Value: !GetAtt cloudxsqslambdaRole.Arn
