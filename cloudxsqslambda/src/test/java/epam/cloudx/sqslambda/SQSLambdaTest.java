@@ -1,4 +1,4 @@
-package helloworld;
+package epam.cloudx.sqslambda;
 
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import static org.junit.Assert.assertEquals;
@@ -6,11 +6,11 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
-public class AppTest {
+public class SQSLambdaTest {
   @Test
   public void successfulResponse() {
-    App app = new App();
-    APIGatewayProxyResponseEvent result = app.handleRequest(null, null);
+    SQSLambda SQSLambda = new SQSLambda();
+    APIGatewayProxyResponseEvent result = SQSLambda.handleRequest(null, null);
     assertEquals(200, result.getStatusCode().intValue());
     assertEquals("application/json", result.getHeaders().get("Content-Type"));
     String content = result.getBody();
