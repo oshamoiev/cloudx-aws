@@ -22,8 +22,8 @@ public class CloudxSQSLambdaService {
     public List<Message> readMessages() {
         ReceiveMessageRequest request = new ReceiveMessageRequest()
                 .withQueueUrl(SQS_URL)
-                .withWaitTimeSeconds(10)
-                .withMaxNumberOfMessages(10);
+                .withWaitTimeSeconds(3)
+                .withMaxNumberOfMessages(3);
 
         ReceiveMessageResult receiveMessageResult = amazonSQS.receiveMessage(request);
         List<Message> messages = receiveMessageResult.getMessages();
