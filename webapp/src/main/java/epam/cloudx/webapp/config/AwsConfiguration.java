@@ -1,6 +1,8 @@
 package epam.cloudx.webapp.config;
 
 import com.amazonaws.regions.Regions;
+import com.amazonaws.services.lambda.AWSLambda;
+import com.amazonaws.services.lambda.AWSLambdaClientBuilder;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.sns.AmazonSNS;
@@ -30,8 +32,15 @@ public class AwsConfiguration {
     }
 
     @Bean
-    public AmazonSNS amazonSNS(){
+    public AmazonSNS amazonSNS() {
         return AmazonSNSClientBuilder.standard()
+                .withRegion(Regions.US_EAST_1)
+                .build();
+    }
+
+    @Bean
+    public AWSLambda awsLambda() {
+        return AWSLambdaClientBuilder.standard()
                 .withRegion(Regions.US_EAST_1)
                 .build();
     }
