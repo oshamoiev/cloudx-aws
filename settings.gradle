@@ -1,4 +1,4 @@
 rootProject.name = 'cloudx-app'
-include 'webapp', 'cloudxsqslambda'
+include 'webapp'
 project(":webapp").name = "webapp"
-project(":cloudxsqslambda").name = "cloudxsqslambda"
+
