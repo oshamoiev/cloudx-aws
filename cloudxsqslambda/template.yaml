@@ -5,30 +5,27 @@ Description: >
 
   Sample SAM Template for cloudxsqslambda
 
-# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
-Globals:
-  Function:
-    Timeout: 20
-
 Resources:
-  cloudxsqslambda:
+  cloudxUploadsBatchNotifier:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
-      CodeUri: cloudxsqslambda
-      Handler: helloworld.App::handleRequest
+      CodeUri: cloudxUploadsBatchNotifier
+      Handler: epam.cloudx.sqslambda.SQSLambda::handleRequest
       Runtime: java11
       Architectures:
         - x86_64
-      MemorySize: 512
+      MemorySize: 256
+      Timeout: 30
+      Role: arn:aws:iam::366246053967:role/CloudxSQSSNSLambda
       Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
         Variables:
           PARAM1: VALUE
           JAVA_TOOL_OPTIONS: -XX:+TieredCompilation -XX:TieredStopAtLevel=1 # More info about tiered compilation https://aws.amazon.com/blogs/compute/optimizing-aws-lambda-function-performance-for-java/
       Events:
-        HelloWorld:
+        cloudxsqslambda:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
-            Path: /hello
+            Path: /run
             Method: get
 
 Outputs:
@@ -36,11 +33,8 @@ Outputs:
   # Find out more about other implicit resources you can reference within SAM
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
   HelloWorldApi:
-    Description: "API Gateway endpoint URL for Prod stage for Hello World function"
+    Description: "API Gateway endpoint URL for Prod stage for cloudxUploadsBatchNotifier function"
     Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
   cloudxsqslambda:
     Description: "Hello World Lambda Function ARN"
-    Value: !GetAtt cloudxsqslambda.Arn
-  cloudxsqslambdaIamRole:
-    Description: "Implicit IAM Role created for Hello World function"
-    Value: !GetAtt cloudxsqslambdaRole.Arn
+    Value: !GetAtt cloudxUploadsBatchNotifier.Arn
